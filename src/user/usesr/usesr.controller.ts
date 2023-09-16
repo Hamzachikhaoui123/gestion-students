@@ -44,8 +44,11 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
         const jwt= await this.jwtService.signAsync({id:user.id})
         
         reponse.cookie('jwt',jwt,{httpOnly:true})
+      
         return {
-            message:'success'
+            message:'success',
+            user:user,
+            access_token:jwt
         };
     }
 
