@@ -5,6 +5,10 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './typeOrm/entites/User';
 import { ConfigModule } from '@nestjs/config';
+import { ClasseModule } from './classe/classe.module';
+import { EtudiantsModule } from './etudiants/etudiants.module';
+import { Etuidant } from './typeOrm/entites/Etuidant';
+import { Class } from './typeOrm/entites/Class';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -14,11 +18,12 @@ import { ConfigModule } from '@nestjs/config';
     username:'root',
     password:'',
     database:'stundents',
-    entities:[User],
+    entities:[User,Etuidant,Class],
     synchronize:true
   }),
   ConfigModule.forRoot({isGlobal:true}),
-   UserModule],
+   UserModule,
+   ClasseModule,EtudiantsModule],
   controllers: [AppController],
   providers: [AppService],
 })
