@@ -1,4 +1,4 @@
-import { Body, Controller, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { EtudiantsService } from './etudiants.service';
 import { CreateEtudiants } from 'src/user/dtos/CreatedEtudiantsDto';
 import { UpdateEtudiants } from 'src/user/dtos/UpdateEtudiantsDto';
@@ -18,4 +18,9 @@ export class EtudiantsController {
     async updateEtudiant(@Param("id",ParseIntPipe) id:string,@Body() updateEtudiants:UpdateEtudiants){
              return await this.etudiantsServices.updateEtudiants(id,updateEtudiants)
     }
+    @Get('/all')
+    async getEtudiants(){
+        return await this.etudiantsServices.getEtuidants()
+    }
+    
 }

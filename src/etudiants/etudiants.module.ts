@@ -7,6 +7,7 @@ import { Etuidant } from 'src/typeOrm/entites/Etuidant';
 @Module({
   imports:[TypeOrmModule.forFeature([Etuidant])],
   providers: [EtudiantsService],
-  controllers: [EtudiantsController]
+  controllers: [EtudiantsController],
+  exports:[EtudiantsService]
 })
 export class EtudiantsModule {}

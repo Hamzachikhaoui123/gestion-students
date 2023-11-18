@@ -23,6 +23,9 @@ export class EtudiantsService {
 
         }
     }
+    getEtuidants():Promise<Array<Etuidant>>{
+        return this.etudiantsRepostory.find()
+    }
 
-    
+
 }
