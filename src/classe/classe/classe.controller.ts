@@ -24,7 +24,7 @@ export class ClasseController {
          const etudiants= await this.etuidatnsServices.getEtuidants()
          console.log("etud",etudiants);
          
-       return  etudiants.filter(elm=>elm.classe==id)
+       return  etudiants.filter(elm=>elm.classe.id==id)
          
     }
 }

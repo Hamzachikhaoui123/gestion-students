@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Class } from 'src/typeOrm/entites/Class';
 import { Etuidant } from 'src/typeOrm/entites/Etuidant';
 import { etudiantsParams } from 'src/utils/util';
 import { Repository } from 'typeorm';
@@ -23,8 +24,10 @@ export class EtudiantsService {
 
         }
     }
-    getEtuidants():Promise<Array<Etuidant>>{
-        return this.etudiantsRepostory.find()
+    getEtuidants(){
+        return this.etudiantsRepostory.find({
+            relations:{classe:true}
+        })
     }
 
 
