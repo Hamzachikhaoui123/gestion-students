@@ -1,11 +1,17 @@
-import { BadRequestException, Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { UsesrService } from './usesr.service';
 import { CreateUserDto } from '../dtos/CreatedUserDto';
 import * as bcrypt from 'bcrypt'
 import { AuthGuardGuard } from '../auth-guard/auth-guard.guard';
 import { JwtService } from '@nestjs/jwt';
-import {  Req, Res } from '@nestjs/common/decorators';
+import {  HttpCode, Query, Req, Res } from '@nestjs/common/decorators';
 import { Response ,Request, response} from 'express';
+import { PageDto } from '../dtos/pagination.Dto';
+import { PageOptionsDto } from '../dtos/PageOptionsDto';
+import { UserDto } from '../dtos/UserDto';
+import { PaginatedResource } from 'src/utils/PaginatedResource';
+import { User } from 'src/typeOrm/entites/User';
+import { Pagination, PaginationParams } from 'src/params/Pagination';
 @Controller('user')
 export class UsesrController {
 constructor(private userService:UsesrService,private jwtService:JwtService){}
@@ -13,6 +19,25 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
     @Get('all')
     findAllUser(){
         return this.userService.getUser()
+    }
+    // @Get('pa')
+    // async findAll(@Query() paginationDto: PaginationDto) {
+    //   return this.userService.findAll(paginationDto);
+    // }
+    // @Get('pa')
+    // @HttpCode(HttpStatus.OK)
+    // async getUsers(
+    //   @Query() pageOptionsDto: PageOptionsDto,
+    // ): Promise<PageDto<UserDto>> {
+    //   return this.userService.getUsers(pageOptionsDto);
+    // }
+
+    @Get()
+    @HttpCode(HttpStatus.OK)
+    public async getCities(
+        @PaginationParams() paginationParams: Pagination,
+    ): Promise<PaginatedResource<Partial<User>>> {
+        return await this.userService.getCities(paginationParams);
     }
 
     @Post('add')
