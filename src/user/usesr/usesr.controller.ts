@@ -5,10 +5,8 @@ import * as bcrypt from 'bcrypt'
 import { AuthGuardGuard } from '../auth-guard/auth-guard.guard';
 import { JwtService } from '@nestjs/jwt';
 import {  HttpCode, Query, Req, Res } from '@nestjs/common/decorators';
-import { Response ,Request, response} from 'express';
-import { PageDto } from '../dtos/pagination.Dto';
-import { PageOptionsDto } from '../dtos/PageOptionsDto';
-import { UserDto } from '../dtos/UserDto';
+import { Response } from 'express';
+
 import { PaginatedResource } from 'src/utils/PaginatedResource';
 import { User } from 'src/typeOrm/entites/User';
 import { Pagination, PaginationParams } from 'src/params/Pagination';
@@ -20,24 +18,14 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
     findAllUser(){
         return this.userService.getUser()
     }
-    // @Get('pa')
-    // async findAll(@Query() paginationDto: PaginationDto) {
-    //   return this.userService.findAll(paginationDto);
-    // }
-    // @Get('pa')
-    // @HttpCode(HttpStatus.OK)
-    // async getUsers(
-    //   @Query() pageOptionsDto: PageOptionsDto,
-    // ): Promise<PageDto<UserDto>> {
-    //   return this.userService.getUsers(pageOptionsDto);
-    // }
+
 
     @Get()
     @HttpCode(HttpStatus.OK)
-    public async getCities(
+    public async getUsers(
         @PaginationParams() paginationParams: Pagination,
     ): Promise<PaginatedResource<Partial<User>>> {
-        return await this.userService.getCities(paginationParams);
+        return await this.userService.getUsers(paginationParams);
     }
 
     @Post('add')
