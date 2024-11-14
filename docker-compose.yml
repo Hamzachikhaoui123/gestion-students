@@ -4,12 +4,33 @@ services:
   nestjs:
     build: .
     ports:
-      - "3000:3000"
+      - "3001:3000"  # Changez le port si nécessaire
     environment:
-      MYSQL_HOST: localhost  # Use localhost to connect to MySQL running on host
+      MYSQL_HOST: db
       MYSQL_PORT: 3306
       MYSQL_USER: root
-      MYSQL_PASSWORD: 
-      MYSQL_DATABASE: stundents
+      MYSQL_PASSWORD: ''
+      MYSQL_DATABASE: students
+    depends_on:
+      - db
+    networks:
+      - app-network
+    entrypoint: ["./wait-for-it.sh", "db:3306", "--", "npm", "run", "start:dev"]
 
-  # Remove the MySQL service since we're using localhost
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: students
+    ports:
+      - "3307:3306"
+    networks:
+      - app-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+networks:
+  app-network:
+
+volumes:
+  mysql-data:
