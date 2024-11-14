@@ -2,8 +2,6 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ClasseService } from './classe.service';
 import { CreateClassDto } from 'src/user/dtos/CreatedClassDto';
 import { EtudiantsService } from 'src/etudiants/etudiants.service';
-import { Etuidant } from 'src/typeOrm/entites/Etuidant';
-import { Query } from 'typeorm/driver/Query';
 
 @Controller('classe')
 export class ClasseController {
@@ -20,7 +18,6 @@ export class ClasseController {
     }
     @Get(':id/allEduitans')
         async getEtudiantsByIdClass(@Param('id') id:any){
-       console.log("id",id)
          const etudiants= await this.etuidatnsServices.getEtuidants()
          console.log("etud",etudiants);
          
