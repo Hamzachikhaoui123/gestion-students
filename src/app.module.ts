@@ -13,7 +13,7 @@ import { Class } from './typeOrm/entites/Class';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type:'mysql',
-    host:'localhost',
+    host: (process.env.MYSQL_HOST as string) ,  // Indique explicitement que MYSQL_HOST est une chaîne
     port:3306,
     username:'root',
     password:'',
