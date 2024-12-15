@@ -40,14 +40,13 @@ export class UsesrService {
   }
 
   async addUser(userParams: userParams): Promise<User> {
+    
     const addUser = this.userRepository.create({ ...userParams, createdAt: new Date() })
     return this.userRepository.save(addUser)
   }
   async findByEmail(email: any): Promise<User | undefined> {
-    console.log(email);
     const user = this.userRepository.findOneBy({ email })
-    user.then((value) => { console.log(value); }
-    )
+    user.then((value) => { console.log(value); })
     return user
   }
 }

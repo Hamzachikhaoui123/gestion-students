@@ -1,5 +1,4 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./User";
 import { Etuidant } from "./Etuidant";
 
 @Entity({name:'class'})

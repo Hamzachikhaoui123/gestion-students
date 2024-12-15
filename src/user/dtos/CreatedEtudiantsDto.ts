@@ -1,11 +1,13 @@
-import { IsEmail } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { Class } from "src/typeOrm/entites/Class";
 
-export class CreateEtudiants {
+export class CreatedEtudiantsDto {
+   @IsString()
+   @IsNotEmpty()
+
     userName: string;
-    @IsEmail()
+    @IsNotEmpty()
     email: string;
     birthdate: number;
-
-    classe: Class
+       
 }

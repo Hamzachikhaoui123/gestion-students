@@ -13,7 +13,6 @@ import { Pagination, PaginationParams } from 'src/params/Pagination';
 @Controller('user')
 export class UsesrController {
 constructor(private userService:UsesrService,private jwtService:JwtService){}
-    @UseGuards(AuthGuardGuard)
     @Get('all')
     findAllUser(){
         return this.userService.getUser()
@@ -30,8 +29,10 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
 
     @Post('add')
    async addUser(@Body() createUserDto:CreateUserDto){
+    console.log('user',createUserDto);
 
-        createUserDto.password=await bcrypt.hash(createUserDto.password,12)
+        createUserDto.password=await bcrypt.hash(createUserDto.password,12);
+        
         return await this.userService.addUser(createUserDto)
     }
 
@@ -40,7 +41,6 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
     
     @Res({passthrough:true})reponse:Response
     ){
-        console.log("email",createUserdto.email);
         
         const user=await this.userService.findByEmail(createUserdto.email);
         

@@ -12,16 +12,17 @@ export class ClasseController {
         return this.classeService.getClass()
     }
     @Post('/add')
-  async  addClass(@Body() createClassDto:CreateClassDto){
-        return await this.classeService.addClass(createClassDto)
+    addClass(@Body() createClassDto:CreateClassDto){
+        return  this.classeService.addClass(createClassDto)
 
     }
     @Get(':id/allEduitans')
         async getEtudiantsByIdClass(@Param('id') id:any){
-         const etudiants= await this.etuidatnsServices.getEtuidants()
-         console.log("etud",etudiants);
+            const query=`SELECT e.username ,e.email from `
+    //      const etudiants= await this.etuidatnsServices.getEtuidants()
+    //      console.log("etud",etudiants);
          
-       return  etudiants.filter(elm=>elm.classe.id==id)
+    //    return  etudiants.filter(elm=>elm.classe.id==id)
          
     }
 }

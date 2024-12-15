@@ -7,7 +7,6 @@ export class Etuidant extends User{
     birthdate:number;
     @ManyToOne(()=>Class,(classe)=>classe.etuidants)
     @JoinColumn()
-
     classe :Class 
     @Column()
     updateAt:Date
