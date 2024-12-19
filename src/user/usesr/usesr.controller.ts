@@ -31,7 +31,6 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
    async addUser(@Body() createUserDto:CreateUserDto){
 
         createUserDto.password=await bcrypt.hash(createUserDto.password,12);
-        console.log('cre',createUserDto);
         
         return await this.userService.addUser(createUserDto)
     }

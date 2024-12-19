@@ -1,9 +1,11 @@
-import { Class } from "src/typeOrm/entites/Class";
+import { IsDate, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class UpdateEtudiants {
-    userName: string;
-    email: string;
-    birthdate: number;
+    @IsString()
+    username: string;
+     @IsString()
+     email?: string;
+     @IsNumber()
+     birthdate: number
 
-    classe: Class
 }

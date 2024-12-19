@@ -17,8 +17,11 @@ export class EtudiantsService {
         return this.etudiantsRepostory.save(addUser)
     }
     updateEtudiants(id, etudiantsParams: etudiantsParams) {
+
         const etudiant = this.etudiantsRepostory.findOneBy(id)
+        
         if (!etudiant) {
+
             throw new HttpException('Not Found', HttpStatus.NOT_FOUND)
         }
         else {
@@ -34,23 +37,22 @@ export class EtudiantsService {
 
     }
 
-  public async getUsers(
+  public async getEtuidantsPagination(
     { page, limit, size, offset }: Pagination,
 
   ): Promise<PaginatedResource<Partial<Etuidant>>> {
-    const limitnew = size || 10; // Par défaut, taille de la page 10 si `size` n'est pas défini
-    const offsetnew = (page - 1) * limitnew; // Calcul de l'index de départ
-    console.log("pffest",offsetnew);
+     limit = size || 10; // Par défaut, taille de la page 10 si `size` n'est pas défini
+     offset = (page - 1) * limit; // Calcul de l'index de départ
     
-    const [users, total] = await this.etudiantsRepostory.findAndCount({
+    const [edtuidants, total] = await this.etudiantsRepostory.findAndCount({
         relations:{classe:true},
-      take: limitnew,
-      skip: offsetnew,
+      take: limit,
+      skip: offset,
     });
 
     return {
       totalItems: total,
-      items: users,
+      items: edtuidants,
       page,
       size
     };

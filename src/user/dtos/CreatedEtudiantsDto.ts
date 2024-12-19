@@ -3,8 +3,6 @@ import { Class } from "src/typeOrm/entites/Class";
 
 export class CreatedEtudiantsDto {
    @IsString()
-   @IsNotEmpty()
-
     userName: string;
     @IsNotEmpty()
     email: string;

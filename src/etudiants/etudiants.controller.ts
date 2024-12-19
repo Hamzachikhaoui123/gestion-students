@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseFilters } from '@nestjs/common';
 import { EtudiantsService } from './etudiants.service';
 import { UpdateEtudiants } from 'src/user/dtos/UpdateEtudiantsDto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -8,6 +8,8 @@ import { Etuidant } from 'src/typeOrm/entites/Etuidant';
 import { User } from 'src/typeOrm/entites/User';
 import { Pagination, PaginationParams } from 'src/params/Pagination';
 import { PaginatedResource } from 'src/utils/PaginatedResource';
+import { HttpExceptionFilter } from 'src/Exception';
+@UseFilters(HttpExceptionFilter)
 
 @Controller('etudiants')
 export class EtudiantsController {
@@ -20,7 +22,7 @@ export class EtudiantsController {
     async create(@Body()data: { birthdate: number; userName: string; email?: string,createdAt?: Date },@Param("id") id:string,): Promise<Etuidant> {
         
         const classe = await this.classRepository.findOne({ where: { id: id } });
-        if (!classe) throw new Error("Class not found");
+        if (!classe) throw new Error("Classe not found");
 
         const etudiant = this.etudiantRepository.create({
             username:data.userName,
@@ -33,9 +35,9 @@ export class EtudiantsController {
         return await this.etudiantRepository.save(etudiant);
     }
 
-    @Put(':id')
-    async updateEtudiant(@Param("id",ParseIntPipe) id:string,@Body() updateEtudiants:UpdateEtudiants){
-             return await this.etudiantsServices.updateEtudiants(id,updateEtudiants)
+    @Put('/update/:id')
+    async updateEtudiant(@Body()data: UpdateEtudiants,@Param("id",ParseIntPipe) id:string){
+             return await this.etudiantsServices.updateEtudiants(id,data)
     }
     @Get('/all')
     async getEtudiants(){
@@ -52,10 +54,10 @@ export class EtudiantsController {
 
     @Get('pagination')
     @HttpCode(HttpStatus.OK)
-    public async getUsers(
+    public async getEtuidantsPagination(
         @PaginationParams() paginationParams: Pagination,
     ): Promise<PaginatedResource<Partial<Etuidant>>> {
-        return await this.etudiantsServices.getUsers(paginationParams);
+        return await this.etudiantsServices.getEtuidantsPagination(paginationParams);
     }
 
    

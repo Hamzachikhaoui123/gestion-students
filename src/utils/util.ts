@@ -10,8 +10,8 @@ export type classParams = {
     name: string
 }
 export type etudiantsParams = {
-
-    userName: string;
-    email: string;
-    birthdate: number;
+    username: string;
+     email?: string;
+     birthdate: number;
+     createdAt?:Date
 }

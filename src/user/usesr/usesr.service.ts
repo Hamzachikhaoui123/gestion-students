@@ -15,22 +15,17 @@ export class UsesrService {
   getUser() {
     return this.userRepository.find()
   }
-
-
-
-
   public async getUsers(
     { page, limit, size, offset }: Pagination,
 
   ): Promise<PaginatedResource<Partial<User>>> {
-    const limitnew = size || 10; // Par défaut, taille de la page 10 si `size` n'est pas défini
-    const offsetnew = (page - 1) * limitnew; // Calcul de l'index de départ
-    console.log("pffest",limitnew);
+    limit = size || 10; // Par défaut, taille de la page 10 si `size` n'est pas défini
+    offset = (page - 1) * offset; // Calcul de l'index de départ
 
     const [users, total] = await this.userRepository.findAndCount({
 
-      take: limitnew,
-      skip: offsetnew,
+      take: limit,
+      skip: offset,
     });
 
     return {
@@ -42,14 +37,13 @@ export class UsesrService {
   }
 
   async addUser(userParams: userParams): Promise<User> {
-    
-    const addUser = this.userRepository.create({ username:userParams.userName,email:userParams.email,password:userParams.password, createdAt: new Date() })
-    
+
+    const addUser = this.userRepository.create({ username: userParams.userName, email: userParams.email, password: userParams.password, createdAt: new Date() })
+
     return this.userRepository.save(addUser)
   }
   async findByEmail(email: any): Promise<User | undefined> {
     const user = this.userRepository.findOneBy({ email })
-    user.then((value) => { console.log(value); })
     return user
   }
 }
