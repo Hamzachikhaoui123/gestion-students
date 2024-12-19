@@ -32,12 +32,16 @@ export class EtudiantsService {
     }
 
     async search(keyword:string):Promise<Etuidant[]>{
-        console.log("keyword",keyword);
         
         return this.etudiantsRepostory.createQueryBuilder('etuidant')
         .where('etuidant.username LIKE :keyword',{keyword:`%${keyword}%`})
         .orWhere('etuidant.email LIKE :keyword',{keyword:`%${keyword}%`}).getMany()
     }
+
+    async filterBYClass(keyword:number):Promise<Etuidant[]>{
+        
+        return this.etudiantsRepostory.createQueryBuilder('etuidant')
+        .where('etuidant.classeId LIKE :keyword',{keyword:`%${keyword}%`}).getMany()    }
 
 
 }

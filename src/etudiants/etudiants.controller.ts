@@ -43,6 +43,9 @@ export class EtudiantsController {
     async searchEtuidants(@Query('keyword') keyword:string){
         return this.etudiantsServices.search(keyword);
     }
-
+    @Get("filter")
+    async filterEtuidants(@Query('keyword') keyword:number){
+        return this.etudiantsServices.filterBYClass(keyword)
+    }
    
 }
