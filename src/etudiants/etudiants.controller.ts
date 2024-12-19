@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { EtudiantsService } from './etudiants.service';
 import { UpdateEtudiants } from 'src/user/dtos/UpdateEtudiantsDto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,8 @@ import { Class } from 'src/typeOrm/entites/Class';
 import { Repository } from 'typeorm';
 import { Etuidant } from 'src/typeOrm/entites/Etuidant';
 import { User } from 'src/typeOrm/entites/User';
+import { Pagination, PaginationParams } from 'src/params/Pagination';
+import { PaginatedResource } from 'src/utils/PaginatedResource';
 
 @Controller('etudiants')
 export class EtudiantsController {
@@ -44,8 +46,17 @@ export class EtudiantsController {
         return this.etudiantsServices.search(keyword);
     }
     @Get("filter")
-    async filterEtuidants(@Query('keyword') keyword:number){
+    async filterEtuidants(@Query('keyword') keyword:string){
         return this.etudiantsServices.filterBYClass(keyword)
     }
+
+    @Get('pagination')
+    @HttpCode(HttpStatus.OK)
+    public async getUsers(
+        @PaginationParams() paginationParams: Pagination,
+    ): Promise<PaginatedResource<Partial<Etuidant>>> {
+        return await this.etudiantsServices.getUsers(paginationParams);
+    }
+
    
 }
