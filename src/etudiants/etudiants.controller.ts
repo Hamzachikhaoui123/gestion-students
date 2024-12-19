@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { EtudiantsService } from './etudiants.service';
 import { UpdateEtudiants } from 'src/user/dtos/UpdateEtudiantsDto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Class } from 'src/typeOrm/entites/Class';
 import { Repository } from 'typeorm';
 import { Etuidant } from 'src/typeOrm/entites/Etuidant';
+import { User } from 'src/typeOrm/entites/User';
 
 @Controller('etudiants')
 export class EtudiantsController {
@@ -15,7 +16,6 @@ export class EtudiantsController {
     }
     @Post('/add/:id')
     async create(@Body()data: { birthdate: number; userName: string; email?: string,createdAt?: Date },@Param("id") id:string,): Promise<Etuidant> {
-        console.log("id",id,data);
         
         const classe = await this.classRepository.findOne({ where: { id: id } });
         if (!classe) throw new Error("Class not found");
@@ -39,5 +39,10 @@ export class EtudiantsController {
     async getEtudiants(){
         return await this.etudiantsServices.getEtuidants()
     }
-    
+    @Get('search')
+    async searchEtuidants(@Query('keyword') keyword:string){
+        return this.etudiantsServices.search(keyword);
+    }
+
+   
 }
