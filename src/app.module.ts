@@ -9,6 +9,7 @@ import { ClasseModule } from './classe/classe.module';
 import { EtudiantsModule } from './etudiants/etudiants.module';
 import { Etuidant } from './typeOrm/entites/Etuidant';
 import { Class } from './typeOrm/entites/Class';
+import { CalendrierModule } from './calendrier/calendrier.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -23,7 +24,7 @@ import { Class } from './typeOrm/entites/Class';
   }),
   ConfigModule.forRoot({isGlobal:true}),
    UserModule,
-   ClasseModule,EtudiantsModule],
+   ClasseModule,EtudiantsModule, CalendrierModule],
   controllers: [AppController],
   providers: [AppService],
 })
