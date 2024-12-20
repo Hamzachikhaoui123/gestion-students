@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseFilters } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseFilters } from '@nestjs/common';
 import { EtudiantsService } from './etudiants.service';
 import { UpdateEtudiants } from 'src/user/dtos/UpdateEtudiantsDto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +9,8 @@ import { User } from 'src/typeOrm/entites/User';
 import { Pagination, PaginationParams } from 'src/params/Pagination';
 import { PaginatedResource } from 'src/utils/PaginatedResource';
 import { HttpExceptionFilter } from 'src/Exception';
+import { GetUsersDto } from 'src/user/dtos/GetUserDto';
+import { PaginationParamsDto } from 'src/user/dtos/PaginationParamsDto';
 @UseFilters(HttpExceptionFilter)
 
 @Controller('etudiants')
@@ -56,9 +58,11 @@ export class EtudiantsController {
     @HttpCode(HttpStatus.OK)
     public async getEtuidantsPagination(
         @PaginationParams() paginationParams: Pagination,
+    
     ): Promise<PaginatedResource<Partial<Etuidant>>> {
         return await this.etudiantsServices.getEtuidantsPagination(paginationParams);
     }
-
+  
+    
    
 }

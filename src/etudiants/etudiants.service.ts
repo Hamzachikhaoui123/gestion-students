@@ -38,13 +38,24 @@ export class EtudiantsService {
     }
 
   public async getEtuidantsPagination(
-    { page, limit, size, offset }: Pagination,
+    { page, limit, size, offset ,sortBy,order}: Pagination,
 
+    
   ): Promise<PaginatedResource<Partial<Etuidant>>> {
+ 
      limit = size || 10; // Par défaut, taille de la page 10 si `size` n'est pas défini
      offset = (page - 1) * limit; // Calcul de l'index de départ
-    
+     const validSortFields = ['id', 'username', 'createdAt'];
+     console.log('sortBy',sortBy,order);
+     
+  if (!validSortFields.includes(sortBy)) {
+    throw new Error(`Invalid sort field: ${sortBy}`);
+  }
+
     const [edtuidants, total] = await this.etudiantsRepostory.findAndCount({
+        order: {
+            [sortBy]: order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+          },
         relations:{classe:true},
       take: limit,
       skip: offset,
@@ -57,7 +68,22 @@ export class EtudiantsService {
       size
     };
   }
-
+  public async getEtudiantsPagination(
+    { page, limit: size },
+    sortBy: string = 'id',
+    order: 'ASC' | 'DESC' = 'ASC',
+  ){
+const [etudiants, total] = await this.etudiantsRepostory.findAndCount({
+  order: {
+    [sortBy]: order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+  },
+  relations: {
+    classe: true,
+  },
+  take: size,
+  skip: (page - 1) * size,
+});
+  }
     async search(keyword: string): Promise<Etuidant[]> {
 
         return this.etudiantsRepostory.createQueryBuilder('etuidant')

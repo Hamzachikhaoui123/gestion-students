@@ -6,12 +6,16 @@ export interface Pagination {
     limit: number;
     size: number;
     offset: number;
+    sortBy: string ,
+    order: 'ASC' | 'DESC' ,
 }
 
 export const PaginationParams = createParamDecorator((data, ctx: ExecutionContext): Pagination => {
     const req: Request = ctx.switchToHttp().getRequest();
     const page = parseInt(req.query.page as string);
     const size = parseInt(req.query.size as string);
+    const sortBy =(req.query.sortBy as string);
+    const order =(req.query.order as any)
 
     // check if page and size are valid
     if (isNaN(page) || page < 0 || isNaN(size) || size < 0) {
@@ -25,5 +29,5 @@ export const PaginationParams = createParamDecorator((data, ctx: ExecutionContex
     // calculate pagination parameters
     const limit = size;
     const offset = page * limit;
-    return { page, limit, size, offset };
+    return { page, limit, size, offset,sortBy,order };
 });
