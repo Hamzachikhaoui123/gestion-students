@@ -21,7 +21,7 @@ export class EtudiantsController {
 
     }
     @Post('/add/:id')
-    async create(@Body()data: { birthdate: number; userName: string; email?: string,createdAt?: Date },@Param("id") id:string,): Promise<Etuidant> {
+    async create(@Body()data: { birthdate: number; userName: string; email?: string,createdAt?: Date },@Param("id",ParseIntPipe) id:string,): Promise<Etuidant> {
         
         const classe = await this.classRepository.findOne({ where: { id: id } });
         if (!classe) throw new Error("Classe not found");

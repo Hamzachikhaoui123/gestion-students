@@ -68,22 +68,7 @@ export class EtudiantsService {
       size
     };
   }
-  public async getEtudiantsPagination(
-    { page, limit: size },
-    sortBy: string = 'id',
-    order: 'ASC' | 'DESC' = 'ASC',
-  ){
-const [etudiants, total] = await this.etudiantsRepostory.findAndCount({
-  order: {
-    [sortBy]: order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-  },
-  relations: {
-    classe: true,
-  },
-  take: size,
-  skip: (page - 1) * size,
-});
-  }
+
     async search(keyword: string): Promise<Etuidant[]> {
 
         return this.etudiantsRepostory.createQueryBuilder('etuidant')
