@@ -13,5 +13,7 @@ export type etudiantsParams = {
     username: string;
      email?: string;
      birthdate: number;
-     createdAt?:Date
+     updateAt:Date;
+     createdAt:Date;
+     classe
 }

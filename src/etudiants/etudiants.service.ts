@@ -1,5 +1,6 @@
-import { HttpException, HttpStatus, Injectable, Param } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException, Param } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ClasseService } from 'src/classe/classe/classe.service';
 import { Pagination } from 'src/params/Pagination';
 import { Class } from 'src/typeOrm/entites/Class';
 import { Etuidant } from 'src/typeOrm/entites/Etuidant';
@@ -10,25 +11,27 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class EtudiantsService {
-    constructor(@InjectRepository(Etuidant) private etudiantsRepostory: Repository<Etuidant>) { }
+    constructor(@InjectRepository(Etuidant) private etudiantsRepostory: Repository<Etuidant>,   @InjectRepository(Class)
+    private classRepository: Repository<Class>) { }
 
-    addEtudiants(etudiantsParams: etudiantsParams) {
-        const addUser = this.etudiantsRepostory.create(etudiantsParams)
-        return this.etudiantsRepostory.save(addUser)
+    async addEtudiants(id, etudiantsParams: etudiantsParams) {
+      const classe = await this.classRepository.findOne({ where: { id: id } });
+      if (!classe) throw new Error("Classe not found");
+
+      const etudiant = this.etudiantsRepostory.create( {...etudiantsParams,createdAt:new Date()});
+
+      return await this.etudiantsRepostory.save(etudiant);
+   
     }
-    updateEtudiants(id, etudiantsParams: etudiantsParams) {
+  async  updateEtudiants(id, etudiantsParams: etudiantsParams){
+    const updateResult = await this.etudiantsRepostory.update(id, etudiantsParams);
 
-        const etudiant = this.etudiantsRepostory.findOneBy(id)
-        
-        if (!etudiant) {
-
-            throw new HttpException('Not Found', HttpStatus.NOT_FOUND)
-        }
-        else {
-            return this.etudiantsRepostory.update(id, { ...etudiantsParams, updateAt: new Date() })
-
-
-        }
+    if (updateResult.affected === 1) {
+      // Récupérer l'objet mis à jour
+      return await this.etudiantsRepostory.findOne({ where: { id },relations:{classe:true} });
+    } else {
+      throw new NotFoundException(`Etudiant avec l'ID ${id} non trouvé.`);
+    }
     }
     getEtuidants() {
         return this.etudiantsRepostory.find({
@@ -82,5 +85,14 @@ export class EtudiantsService {
             .where('etuidant.classeId LIKE :keyword', { keyword: `%${keyword}%` }).getMany()
     }
 
+    async staticEtudiants(keyword:string): Promise<({classe:any,number:any}|undefined)>{
+      const classe = await this.classRepository.findOne({ where: { id: keyword } });
+     
+      
+      return ({
+        classe:  classe,
+        number: await this.etudiantsRepostory.createQueryBuilder('etuidant')
+        .where('etuidant.classeId LIKE :keyword', { keyword: `%${keyword}%` }).getCount() 
 
+      })   }
 }

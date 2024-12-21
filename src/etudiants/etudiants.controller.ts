@@ -11,35 +11,24 @@ import { PaginatedResource } from 'src/utils/PaginatedResource';
 import { HttpExceptionFilter } from 'src/Exception';
 import { GetUsersDto } from 'src/user/dtos/GetUserDto';
 import { PaginationParamsDto } from 'src/user/dtos/PaginationParamsDto';
+import { CreateUserDto } from 'src/user/dtos/CreatedUserDto';
+import { CreatedEtudiantsDto } from 'src/user/dtos/CreatedEtudiantsDto';
 @UseFilters(HttpExceptionFilter)
 
 @Controller('etudiants')
 export class EtudiantsController {
-    constructor(private etudiantsServices:EtudiantsService,    @InjectRepository(Etuidant)
-    private etudiantRepository: Repository<Etuidant>,   @InjectRepository(Class)
-    private classRepository: Repository<Class>){
+    constructor(private etudiantsServices:EtudiantsService){
 
     }
     @Post('/add/:id')
-    async create(@Body()data: { birthdate: number; userName: string; email?: string,createdAt?: Date },@Param("id",ParseIntPipe) id:string,): Promise<Etuidant> {
-        
-        const classe = await this.classRepository.findOne({ where: { id: id } });
-        if (!classe) throw new Error("Classe not found");
-
-        const etudiant = this.etudiantRepository.create({
-            username:data.userName,
-            email: data.email ,
-            birthdate: data.birthdate,
-            createdAt:new Date()||data.createdAt,
-            classe,
-        });
-
-        return await this.etudiantRepository.save(etudiant);
+    async create(@Body()data: CreatedEtudiantsDto,@Param("id",ParseIntPipe) id:string): Promise<Etuidant> {
+        return this.etudiantsServices.addEtudiants(id,data)
+      
     }
 
     @Put('/update/:id')
-    async updateEtudiant(@Body()data: UpdateEtudiants,@Param("id",ParseIntPipe) id:string){
-             return await this.etudiantsServices.updateEtudiants(id,data)
+    async updateEtudiant(@Body()data: UpdateEtudiants,@Param("id",ParseIntPipe) id:string): Promise<Etuidant> {
+             return  this.etudiantsServices.updateEtudiants(id,data)
     }
     @Get('/all')
     async getEtudiants(){
@@ -52,6 +41,10 @@ export class EtudiantsController {
     @Get("filter")
     async filterEtuidants(@Query('keyword') keyword:string){
         return this.etudiantsServices.filterBYClass(keyword)
+    }
+    @Get("static")
+    async staticEtuidants(@Query('keyword') keyword:string){
+        return this.etudiantsServices.staticEtudiants(keyword)
     }
 
     @Get('pagination')

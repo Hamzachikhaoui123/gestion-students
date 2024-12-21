@@ -6,6 +6,9 @@ export class UpdateEtudiants {
      @IsString()
      email?: string;
      @IsNumber()
-     birthdate: number
+     birthdate: number;
+     updateAt:Date;
+     createdAt:Date;
+     classe
 
 }

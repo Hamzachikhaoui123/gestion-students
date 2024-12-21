@@ -8,6 +8,6 @@ import { EtudiantsModule } from '../etudiants/etudiants.module';
 @Module({
   imports:[TypeOrmModule.forFeature([Class]), EtudiantsModule],
   controllers: [ClasseController],
-  providers: [ClasseService]
+  providers: [ClasseService],
 })
 export class ClasseModule {}
