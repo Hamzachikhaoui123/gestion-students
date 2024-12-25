@@ -28,27 +28,29 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
     }
 
     @Post('add')
-   async addUser(@Body() createUserDto:CreateUserDto){
-
-        createUserDto.password=await bcrypt.hash(createUserDto.password,12);
+   async addUser(@Body() data: { password:string, userName: string; email?: string,createdAt?: Date }){
+    if (typeof data.password !== 'string') {
+        throw new Error('Password must be a string');
+    }
+        data.password=await bcrypt.hash(data.password,12);
         
-        return await this.userService.addUser(createUserDto)
+        return await this.userService.addUser(data)
     }
 
     @Post('login')
-    async login(@Body() createUserdto:CreateUserDto,
+    async login(@Body() data:{email:string,password:string},
     
     @Res({passthrough:true})reponse:Response
     ){
         
-        const user=await this.userService.findByEmail(createUserdto.email);
+        const user=await this.userService.findByEmail(data.email);
         
         if(!user){
 
             throw new BadRequestException('user is not found')
             
         }
-        if(!await bcrypt.compare(createUserdto.password,user.password)){
+        if(!await bcrypt.compare(data.password,user.password)){
             
             throw new BadRequestException('Invalid redentilas')
         }

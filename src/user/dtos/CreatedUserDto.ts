@@ -4,9 +4,9 @@ import { IsString } from "class-validator";
    @IsString()
    userName:string;
    @IsString()
-
-    email:string;
+    email?:string;
     @IsString()
-
     password:string
+    createdAt?:Date;
+
  }

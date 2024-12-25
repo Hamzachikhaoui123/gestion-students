@@ -5,13 +5,13 @@ export class User{
     @PrimaryGeneratedColumn({type:'bigint'})
     id:number;
     @Column()
-    username:string;
+    username?:string;
     @Column({unique:true})
-    email:string
+    email?:string
     @Column()
-    password:string
+    password?:string
     @Column()
-    createdAt:Date;
+    createdAt?:Date;
 
     
 

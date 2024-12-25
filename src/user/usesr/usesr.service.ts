@@ -36,9 +36,9 @@ export class UsesrService {
     };
   }
 
-  async addUser(userParams: userParams): Promise<User> {
+  async addUser(data: { password:any, userName: string; email?: string,createdAt?: Date }): Promise<User> {
 
-    const addUser = this.userRepository.create({ username: userParams.userName, email: userParams.email, password: userParams.password, createdAt: new Date() })
+    const addUser = this.userRepository.create({ username: data.userName, email: data.email, password: data.password, createdAt: new Date() })
 
     return this.userRepository.save(addUser)
   }
