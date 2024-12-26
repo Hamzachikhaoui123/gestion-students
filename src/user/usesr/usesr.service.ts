@@ -16,14 +16,19 @@ export class UsesrService {
     return this.userRepository.find()
   }
   public async getUsers(
-    { page, limit, size, offset }: Pagination,
+    { page, limit, size, offset,sortBy,order }: Pagination,
 
   ): Promise<PaginatedResource<Partial<User>>> {
     limit = size || 10; // Par défaut, taille de la page 10 si `size` n'est pas défini
     offset = (page - 1) * offset; // Calcul de l'index de départ
-
+        const validSortFields=['id','username','createAt'];
+        if(!validSortFields.includes(sortBy)){
+          throw new Error(`Invalid sort field : ${sortBy}`)
+        }
     const [users, total] = await this.userRepository.findAndCount({
-
+      order:{
+        [sortBy]:order.toUpperCase() ==="ASC"?'ASC':'DESC'
+      },
       take: limit,
       skip: offset,
     });

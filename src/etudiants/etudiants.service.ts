@@ -49,7 +49,6 @@ export class EtudiantsService {
      limit = size || 10; // Par défaut, taille de la page 10 si `size` n'est pas défini
      offset = (page - 1) * limit; // Calcul de l'index de départ
      const validSortFields = ['id', 'username', 'createdAt'];
-     console.log('sortBy',sortBy,order);
      
   if (!validSortFields.includes(sortBy)) {
     throw new Error(`Invalid sort field: ${sortBy}`);
