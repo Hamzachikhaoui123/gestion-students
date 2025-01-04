@@ -18,7 +18,6 @@ export class EtudiantsService {
       const classe = await this.classRepository.findOne({ where: { id: id } });
       
       if (!classe) throw new Error("Classe not found");
-console.log('etudiantsParams',classe);
 
       const etudiant = this.etudiantsRepostory.create( {...etudiantsParams,createdAt:new Date(),classe:classe});
 
@@ -92,8 +91,8 @@ console.log('etudiantsParams',classe);
       
       return ({
         classe:  classe,
-        number: await this.etudiantsRepostory.createQueryBuilder('Etudiant')
-        .where('Etudiant.classeId LIKE :keyword', { keyword: `%${keyword}%` }).getCount() 
+        number: await this.etudiantsRepostory.createQueryBuilder('etudiant')
+        .where('etudiant.classeId LIKE :keyword', { keyword: `%${keyword}%` }).getCount() 
 
       })   }
 }

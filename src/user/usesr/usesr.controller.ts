@@ -4,7 +4,7 @@ import { CreateUserDto } from '../dtos/CreatedUserDto';
 import * as bcrypt from 'bcrypt'
 import { AuthGuardGuard } from '../auth-guard/auth-guard.guard';
 import { JwtService } from '@nestjs/jwt';
-import {  HttpCode, Query, Req, Res } from '@nestjs/common/decorators';
+import {  HttpCode, Patch, Query, Req, Res } from '@nestjs/common/decorators';
 import { Response } from 'express';
 
 import { PaginatedResource } from 'src/utils/PaginatedResource';
@@ -41,7 +41,8 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
     async login(@Body() data:{email:string,password:string},
     
     @Res({passthrough:true})reponse:Response
-    ){
+    )
+    {
         
         const user=await this.userService.findByEmail(data.email);
         
@@ -65,6 +66,49 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
             access_token:jwt
         };
     }
+
+    @Patch('rest')
+   async restPassword(@Body() data:{email:string,password:string,newPassword:string,confrimPassword:string},
+    
+   @Res({passthrough:true})reponse:Response
+   )
+        {
+        
+            const user=await this.userService.findByEmail(data.email);
+            
+            if(!user){
+    
+                throw new BadRequestException('user is not found')
+                
+            }
+            if(!await bcrypt.compare(data.password,user.password)){
+                
+                throw new BadRequestException('Invalid redentilas')
+            }
+
+            if( data.newPassword !== data.confrimPassword){
+                throw new BadRequestException('Invalid Password')
+
+            }
+            if (typeof data.newPassword !== 'string') {
+                throw new Error('Password must be a string');
+            }
+            data.newPassword=await bcrypt.hash(data.newPassword,12);
+            console.log('pass',data.newPassword);
+            
+            const newData=({email:data.email,password:data.newPassword})
+            const newUser = await this.userService.updateUserPassword(user.id,newData)
+            
+            const jwt= await this.jwtService.signAsync({id:newUser.id})
+            
+            reponse.cookie('jwt',jwt,{httpOnly:true})
+          
+            return {
+                message:'success',
+                user:newUser,
+                access_token:jwt
+            };
+        }
 
 
 }

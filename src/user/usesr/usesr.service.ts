@@ -1,4 +1,4 @@
-import { Body, Injectable } from '@nestjs/common';
+import { Body, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/typeOrm/entites/User';
 import { userParams } from 'src/utils/util';
@@ -47,6 +47,17 @@ export class UsesrService {
 
     return this.userRepository.save(addUser)
   }
+
+    async  updateUserPassword(id, data:{email:string,password:string}){
+      const updateResult = await this.userRepository.update(id, data);
+  
+      if (updateResult.affected === 1) {
+        // Récupérer l'objet mis à jour
+        return await this.userRepository.findOne({ where: { id }});
+      } else {
+        throw new NotFoundException(`Etudiant avec l'ID ${id} non trouvé.`);
+      }
+      }
   async findByEmail(email: any): Promise<User | undefined> {
     const user = this.userRepository.findOneBy({ email })
     return user
