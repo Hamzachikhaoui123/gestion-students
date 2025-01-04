@@ -1,13 +1,13 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Query, UseFilters } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Get, Param, ParseIntPipe, Post, Query, UseFilters, UseInterceptors } from '@nestjs/common';
 import { ClasseService } from './classe.service';
 import { CreateClassDto } from 'src/user/dtos/CreatedClassDto';
-import { EtudiantsService } from 'src/etudiants/etudiants.service';
 import { HttpExceptionFilter } from 'src/Exception';
 @UseFilters(HttpExceptionFilter)
+@UseInterceptors(ClassSerializerInterceptor)
 
 @Controller('classe')
 export class ClasseController {
-    constructor(private classeService:ClasseService,private etuidatnsServices:EtudiantsService){}
+    constructor(private classeService:ClasseService){}
 
     @Get('/all')
     getUsers(){
@@ -24,5 +24,7 @@ export class ClasseController {
         return this.classeService.getClassById(id)
 
     }
+
+   
 
 }

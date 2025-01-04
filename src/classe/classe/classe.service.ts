@@ -19,6 +19,7 @@ export class ClasseService {
 
         )
     }
+
     async addClass(createClassDto: CreateClassDto): Promise<Class> {
         const newClass = this.classRepository.create(createClassDto); // Prépare l'entité
         return await this.classRepository.save(newClass); // Enregistre dans la base de données
