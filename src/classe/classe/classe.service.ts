@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { throws } from 'assert';
 import { HttpExceptionFilter } from 'src/Exception';
 import { Class } from 'src/typeOrm/entites/Class';
-import { Etuidant } from 'src/typeOrm/entites/Etuidant';
 import { UserNotFoundException } from 'src/typeOrm/error/userNotFoundExeception';
 import { CreateClassDto } from 'src/user/dtos/CreatedClassDto';
 import { classParams } from 'src/utils/util';
@@ -15,7 +14,7 @@ export class ClasseService {
 
     getClass() {
         return this.classRepository.find(
-            { relations: { etuidants: true } }
+            { relations: { etudiants: true } }
 
         )
     }
@@ -26,7 +25,7 @@ export class ClasseService {
     }
 
     async getClassById(id: string): Promise<Class> {
-        const classe = await this.classRepository.findOne({ where: { id: id }, relations: { etuidants: true } })
+        const classe = await this.classRepository.findOne({ where: { id: id }, relations: { etudiants: true } })
 
         if (!classe) {
             throw new UserNotFoundException(id);

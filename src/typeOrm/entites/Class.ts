@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Etuidant } from "./Etuidant";
 import { Expose } from "class-transformer";
+import { Etudiant } from "./Etudiant";
 
 @Entity({name:'class'})
 export class Class {
@@ -8,11 +8,11 @@ export class Class {
     id:string;
     @Column()
     name:string
-    @OneToMany(()=>Etuidant,(etuidant)=>etuidant.classe)
-    etuidants:Etuidant[]
+    @OneToMany(()=>Etudiant,(etudiants)=>etudiants.classe)
+    etudiants:Etudiant[]
        @Expose()
-    get  numberOfEtuidants():number{
-       return this.etuidants?.length || 0
+    get  numberOfEtudiants():number{
+       return this.etudiants?.length || 0
 
     }
 }

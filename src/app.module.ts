@@ -7,10 +7,10 @@ import { User } from './typeOrm/entites/User';
 import { ConfigModule } from '@nestjs/config';
 import { ClasseModule } from './classe/classe.module';
 import { EtudiantsModule } from './etudiants/etudiants.module';
-import { Etuidant } from './typeOrm/entites/Etuidant';
 import { Class } from './typeOrm/entites/Class';
 import { CalendrierModule } from './calendrier/calendrier.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { Etudiant } from './typeOrm/entites/Etudiant';
 
 @Module({
   imports: [
@@ -25,8 +25,8 @@ import { CacheModule } from '@nestjs/cache-manager';
     username:'root',
     password:'',
     database:'stundents',
-    entities:[User,Etuidant,Class],
-    synchronize:true
+    entities:[User,Etudiant,Class],
+    synchronize:false
   }),
   ConfigModule.forRoot({isGlobal:true}),
    UserModule,
