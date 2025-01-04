@@ -10,9 +10,15 @@ import { EtudiantsModule } from './etudiants/etudiants.module';
 import { Etuidant } from './typeOrm/entites/Etuidant';
 import { Class } from './typeOrm/entites/Class';
 import { CalendrierModule } from './calendrier/calendrier.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
+  imports: [
+    CacheModule.register({
+      isGlobal:true,
+      ttl:30*1000
+    }),
+    TypeOrmModule.forRoot({
     type:'mysql',
     host: (process.env.MYSQL_HOST as string) ,  // Indique explicitement que MYSQL_HOST est une chaîne
     port:3306,
