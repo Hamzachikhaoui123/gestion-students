@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseFilters } from '@nestjs/common';
+import { BadRequestException, Body, ClassSerializerInterceptor, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseFilters, UseInterceptors } from '@nestjs/common';
 import { EtudiantsService } from './etudiants.service';
 import { UpdateEtudiants } from 'src/user/dtos/UpdateEtudiantsDto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +14,7 @@ import { PaginationParamsDto } from 'src/user/dtos/PaginationParamsDto';
 import { CreateUserDto } from 'src/user/dtos/CreatedUserDto';
 import { CreatedEtudiantsDto } from 'src/user/dtos/CreatedEtudiantsDto';
 @UseFilters(HttpExceptionFilter)
+@UseInterceptors(ClassSerializerInterceptor)
 
 @Controller('etudiants')
 export class EtudiantsController {
