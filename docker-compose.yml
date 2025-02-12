@@ -1,27 +1,67 @@
-version: '3.8'
+# version: '3.8'
+# services:
+#   nestjs:
+#     build: .
+#     ports:
+#       - "3001:3000"
+#     environment:
+#       MYSQL_HOST: db
+#       MYSQL_PORT: 3306
+#       MYSQL_USER: root
+#       MYSQL_PASSWORD: ''
+#       MYSQL_DATABASE: students
+#     depends_on:
+#       - db
+#     networks:
+#       - app-network
+#     entrypoint: ["/app/wait-for-it.sh", "db:3306", "--", "npm", "run", "start:dev"]
+
+#   db:
+#     image: mysql:5.7
+#     environment:
+#       MYSQL_ROOT_PASSWORD: ""  # Mot de passe vide pour root
+#       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"  # Permet les mots de passe vides
+#       MYSQL_DATABASE: students
+#     ports:
+#       - "3307:3306"
+#     networks:
+#       - app-network
+#     volumes:
+#       - mysql-data:/var/lib/mysql  # Volume persistant pour les données
+
+# networks:
+#   app-network:
+#     driver: bridge
+
+# volumes:
+#   mysql-data:  # Définition du volume persistant
+#     driver: local
+
+
 
 services:
   nestjs:
     build: .
     ports:
-      - "3001:3000"  # Changez le port si nécessaire
+      - "3001:3000"
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306
       MYSQL_USER: root
       MYSQL_PASSWORD: ''
-      MYSQL_DATABASE: students
+      MYSQL_DATABASE: stundents
     depends_on:
       - db
     networks:
       - app-network
-    entrypoint: ["./wait-for-it.sh", "db:3306", "--", "npm", "run", "start:dev"]
+    entrypoint: ["dockerize", "-wait", "tcp://db:3306", "-timeout", "60s", "npm", "run", "start:dev"]
 
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_DATABASE: students
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: stundents
     ports:
       - "3307:3306"
     networks:
@@ -31,6 +71,9 @@ services:
 
 networks:
   app-network:
+    driver: bridge
 
 volumes:
   mysql-data:
+    driver: local
+

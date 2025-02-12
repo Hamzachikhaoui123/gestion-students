@@ -1,0 +1,12 @@
+# Utilisez une image de base officielle de RabbitMQ
+FROM rabbitmq:3-management
+
+# Exposez les ports nécessaires
+EXPOSE 5672 15672
+
+# Optionnel : Ajoutez des plugins ou des configurations supplémentaires
+# RUN rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_stomp rabbitmq_management
+
+# Définissez les variables d'environnement pour RabbitMQ
+ENV RABBITMQ_DEFAULT_USER=admin
+ENV RABBITMQ_DEFAULT_PASS=password
