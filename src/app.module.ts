@@ -8,7 +8,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ClasseModule } from './classe/classe.module';
 import { EtudiantsModule } from './etudiants/etudiants.module';
 import { Class } from './typeOrm/entites/Class';
-import { CalendrierModule } from './calendrier/calendrier.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { Etudiant } from './typeOrm/entites/Etudiant';
 
@@ -30,7 +29,7 @@ import { Etudiant } from './typeOrm/entites/Etudiant';
   }),
   ConfigModule.forRoot({isGlobal:true}),
    UserModule,
-   ClasseModule,EtudiantsModule, CalendrierModule],
+   ClasseModule,EtudiantsModule],
   controllers: [AppController],
   providers: [AppService],
 })

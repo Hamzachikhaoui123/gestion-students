@@ -1,5 +1,5 @@
 # 
-FROM node:16
+FROM node:18
 
 # Installer dockerize
 RUN apt-get update && apt-get install -y wget && \
@@ -11,5 +11,5 @@ RUN apt-get update && apt-get install -y wget && \
 WORKDIR /app
 COPY . .
 
-RUN npm install
+RUN npm install --force
 CMD ["npm", "run", "start:dev"]

@@ -10,9 +10,26 @@ import { Response } from 'express';
 import { PaginatedResource } from 'src/utils/PaginatedResource';
 import { User } from 'src/typeOrm/entites/User';
 import { Pagination, PaginationParams } from 'src/params/Pagination';
+import { NotificationsGateway } from 'src/notifications/notifications.gateway';
+import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
 @Controller('user')
+
 export class UsesrController {
-constructor(private userService:UsesrService,private jwtService:JwtService){}
+    private client: ClientProxy;
+
+constructor(private userService:UsesrService,private jwtService:JwtService,    private readonly notificationsGateway: NotificationsGateway
+){
+    this.client = ClientProxyFactory.create({
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://user:password@rabbitmq'],
+          queue: 'notifications_queue',
+          queueOptions: {
+            durable: false,
+          },
+        },
+      });
+}
     @Get('all')
     findAllUser(){
         return this.userService.getUser()
@@ -34,7 +51,23 @@ constructor(private userService:UsesrService,private jwtService:JwtService){}
     }
         data.password=await bcrypt.hash(data.password,12);
         
-        return await this.userService.addUser(data)
+         const newUser= this.userService.addUser(data);
+           // Envoi d'une notification via RabbitMQ
+    await this.client.emit('user_created', {
+        userId: (await newUser).id,
+        email: (await newUser).email,
+      }).toPromise();
+  
+      // Envoi d'une notification en temps réel via WebSocket
+      this.notificationsGateway.sendNotification({
+        message: 'Nouvel utilisateur créé',
+        user: {
+          id: (await newUser).id,
+          email: (await newUser).email,
+        },
+      });
+  
+      return newUser;
     }
 
     @Post('login')

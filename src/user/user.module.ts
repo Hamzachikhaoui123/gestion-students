@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/typeOrm/entites/User';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants/constants';
+import { NotificationsGateway } from 'src/notifications/notifications.gateway';
 
 @Module({
   imports:[TypeOrmModule.forFeature([User]),  JwtModule.register({
@@ -14,6 +15,6 @@ import { jwtConstants } from './constants/constants';
   }),],
 
   controllers: [UsesrController],
-  providers: [UsesrService]
+  providers: [UsesrService,NotificationsGateway]
 })
 export class UserModule {}
