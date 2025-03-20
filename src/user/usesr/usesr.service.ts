@@ -1,7 +1,6 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/typeOrm/entites/User';
-import { userParams } from 'src/utils/util';
 import { Repository } from 'typeorm';
 
 import { PaginatedResource } from 'src/utils/PaginatedResource';

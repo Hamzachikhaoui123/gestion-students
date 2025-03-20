@@ -23,7 +23,7 @@ import { Etudiant } from './typeOrm/entites/Etudiant';
     port:3306,
     username:'root',
     password:'',
-    database:'stundents',
+    database:'students',
     entities:[User,Etudiant,Class],
     synchronize: false, // false pour utiliser les migrations
   }),

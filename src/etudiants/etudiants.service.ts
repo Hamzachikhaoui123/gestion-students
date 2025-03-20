@@ -19,7 +19,7 @@ export class EtudiantsService {
       
       if (!classe) throw new Error("Classe not found");
 
-      const etudiant = this.etudiantsRepostory.create( {...etudiantsParams,createdAt:new Date(),classe:classe});
+      const etudiant = this.etudiantsRepostory.create( {...etudiantsParams,createdAt:new Date(),classe:classe,password:'1221222525',updateAt:new Date()});
 
       return await this.etudiantsRepostory.save(etudiant);
    

@@ -4,14 +4,14 @@ services:
   nestjs:
     build: .
     ports:
-      - "3001:3000"
+      - "3002:3000"
     environment:
       MYSQL_HOST: db
       MYSQL_PORT: 3306
       MYSQL_USER: root
       MYSQL_PASSWORD: ''
-      MYSQL_DATABASE: stundents # Vérifie bien ce nom
-      RABBITMQ_URL: amqp://user:password@rabbitmq
+      MYSQL_DATABASE: students  # Nom corrigé
+      RABBITMQ_URL: amqp://user:password@rabbitmq:5672  # URL corrigée
     depends_on:
       db:
         condition: service_healthy
@@ -20,14 +20,14 @@ services:
     networks:
       - app-network
     restart: always
-    entrypoint: ["dockerize", "-wait", "tcp://db:3306", "-wait", "tcp://rabbitmq:5672", "-timeout", "60s", "npm", "run", "start:dev"]
+    entrypoint: ["dockerize", "-wait", "tcp://db:3306", "-wait", "tcp://rabbitmq:5672", "-timeout", "60s", "npm", "run", "start:dev"]  # Port corrigé
 
   db:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: ""
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: stundents
+      MYSQL_DATABASE: students  # Nom corrigé
     ports:
       - "3307:3306"
     networks:
@@ -36,7 +36,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]  # Healthcheck corrigé
       interval: 10s
       retries: 5
       start_period: 10s
@@ -45,8 +45,8 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"   # Port AMQP pour la communication entre services
-      - "15672:15672" # Interface Web de gestion RabbitMQ
+      - "5673:5672"   # Port AMQP pour la communication entre services
+      - "15673:15672" # Interface Web de gestion RabbitMQ
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
