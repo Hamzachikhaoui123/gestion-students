@@ -61,4 +61,8 @@ export class UsesrService {
     const user = this.userRepository.findOneBy({ email })
     return user
   }
+  async search(keyword:string):Promise<User[]>{
+    return  this.userRepository.createQueryBuilder('user')
+    .where('user.username LIKE :keyword',{keyword:`%${keyword}%`}).orWhere('user.email LIKE :keyword',{keyword:`%${keyword}%`}).getMany()
+  }
 }

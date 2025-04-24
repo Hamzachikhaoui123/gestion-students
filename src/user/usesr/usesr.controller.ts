@@ -22,7 +22,7 @@ constructor(private userService:UsesrService,private jwtService:JwtService,    p
     this.client = ClientProxyFactory.create({
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://user:password@rabbitmq'],
+          urls: ['amqp://user:password@rabbitmq:5672'],
           queue: 'notifications_queue',
           queueOptions: {
             durable: false,
@@ -35,7 +35,10 @@ constructor(private userService:UsesrService,private jwtService:JwtService,    p
         return this.userService.getUser()
     }
 
-
+    @Get('search')
+    async searchUsers(@Query('keyword') keyword:string){
+        return this.userService.search(keyword);
+    }
     @Get()
     @HttpCode(HttpStatus.OK)
     public async getUsers(
@@ -53,10 +56,16 @@ constructor(private userService:UsesrService,private jwtService:JwtService,    p
         
          const newUser= this.userService.addUser(data);
            // Envoi d'une notification via RabbitMQ
-    await this.client.emit('user_created', {
-        userId: (await newUser).id,
-        email: (await newUser).email,
-      }).toPromise();
+           await this.client.emit('user_created', {
+            userId: (await newUser).id,
+            email: (await newUser).email,
+          }).toPromise()
+          .then(() => {
+            console.log('Notification sent to RabbitMQ');
+          })
+          .catch((error) => {
+            console.error('Failed to send notification to RabbitMQ:', error);
+          });
   
       // Envoi d'une notification en temps réel via WebSocket
       this.notificationsGateway.sendNotification({
