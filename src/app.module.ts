@@ -25,7 +25,7 @@ import { Etudiant } from './typeOrm/entites/Etudiant';
     password:'',
     database:'students',
     entities:[User,Etudiant,Class],
-    synchronize: false, // false pour utiliser les migrations
+    synchronize: true, // false pour utiliser les migrations
   }),
   ConfigModule.forRoot({isGlobal:true}),
    UserModule,
